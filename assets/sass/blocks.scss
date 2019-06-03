@@ -1,0 +1,48 @@
+body {
+    display: grid;
+    grid-template-areas:
+        'h h h'
+        'c c c'
+        'atf atf atf';
+    width: 960px;
+}
+
+#header {
+    grid-area: h;
+    text-align: center;
+}
+
+.content {
+    grid-area: c;
+    &_container {
+        display: grid;
+        grid-template-areas:
+            'l tt b';
+        grid-template-columns: 100px 1fr 200px;
+        text-align: center;
+    }
+    .list_numbers {
+        grid-area: l;
+    }
+    .todo_text {
+        grid-area: tt;
+    }
+}
+
+#add_text_field {
+    grid-area: atf;
+    display: grid;
+    grid-template-areas: 
+        'if if b';
+    grid-template-columns: 1fr 1fr 200px;
+    input.text {
+        grid-area: if;
+    }
+}
+
+.button_container {
+    grid-area: b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
