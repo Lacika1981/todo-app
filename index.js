@@ -1,15 +1,16 @@
 var todoApp = (function todoApp() {
 
-    
+
     var publicMethods = {
         logState,
     };
-    
+
     var state = {
         text: '',
         numberOfElems: 1,
+        updateContent: '',
     };
-    
+
     var inputField = document.querySelector('input.text');
     var contentMain = document.querySelector('.content');
     var addButton = document.querySelector('button.add_content');
@@ -17,19 +18,19 @@ var todoApp = (function todoApp() {
     inputField.addEventListener('keyup', updateState);
 
     function logState() {
-        console.log({state});
+        console.log({ state });
     }
-    
-    
+
+
     function updateState() {
         state.text = inputField.value;
-        state.text != '' ? addButton.removeAttribute('disabled') : addButton.setAttribute('disabled', true) 
+        state.text != '' ? addButton.removeAttribute('disabled') : addButton.setAttribute('disabled', true)
     }
 
     function addMethod() {
         addButton.addEventListener('click', createElems);
     }
-    
+
     function createElems() {
         var contentContainer = document.createElement('section');
         var listNumber = document.createElement('div');
@@ -41,13 +42,14 @@ var todoApp = (function todoApp() {
         contentContainer.setAttribute('class', 'content_container');
         listNumber.setAttribute('class', 'list_numbers');
         todoText.setAttribute('class', 'todo_text');
+        todoText.setAttribute('contentEditable', false);
         buttonContainer.setAttribute('class', 'button_container');
         doneButton.setAttribute('class', 'update_content');
         updateButton.setAttribute('class', 'update_done');
         deleteButton.setAttribute('class', 'remove-content');
         deleteButton.addEventListener('click', removeTodo);
         updateButton.addEventListener('click', updateContent);
-        
+
         var content = document.createTextNode(state.text);
         todoText.appendChild(content);
 
@@ -64,13 +66,13 @@ var todoApp = (function todoApp() {
         buttonContainer.appendChild(doneButton);
         buttonContainer.appendChild(updateButton);
         buttonContainer.appendChild(deleteButton);
-        
+
         contentContainer.appendChild(listNumber);
         contentContainer.appendChild(todoText);
         contentContainer.appendChild(buttonContainer);
-        
+
         contentMain.appendChild(contentContainer);
-        
+
         inputField.value = '';
         updateState();
         state.numberOfElems++;
@@ -78,7 +80,7 @@ var todoApp = (function todoApp() {
 
     function updateListNumbers() {
         var liNumbers = document.querySelectorAll('.list_numbers');
-        for(var i = 1; i <= liNumbers.length; i++) {
+        for (var i = 1; i <= liNumbers.length; i++) {
             console.log(liNumbers[i]);
             liNumbers[i - 1].textContent = i;
         }
@@ -86,8 +88,12 @@ var todoApp = (function todoApp() {
 
     function updateContent() {
         var textNode = this.closest('.content_container').children[1];
-        textNode.setAttribute('contentEditable', true);
-        console.log(textNode);
+        textNode.focus();
+        textNode.click();
+        state.updateContent = textNode.textContent;
+        textNode.getAttribute('contentEditable') == 'true'
+        ? textNode.setAttribute('contentEditable', false)
+        : textNode.setAttribute('contentEditable', true);
     }
 
     function removeTodo() {
@@ -96,7 +102,7 @@ var todoApp = (function todoApp() {
         updateListNumbers();
         state.numberOfElems--;
     }
-    
+
     addMethod();
 
     return publicMethods;
