@@ -82,7 +82,6 @@ var todoApp = (function todoApp() {
     function updateListNumbers() {
         var liNumbers = document.querySelectorAll('.list_numbers');
         for (var i = 1; i <= liNumbers.length; i++) {
-            console.log(liNumbers[i]);
             liNumbers[i - 1].textContent = i;
         }
     }
@@ -101,7 +100,8 @@ var todoApp = (function todoApp() {
         if(textNode.getAttribute('done') == 'true') {
             return
         } else {
-            textNode.setAttribute('done', true)
+            textNode.setAttribute('done', true);
+            textNode.setAttribute('contentEditable', false);
             disableButton(this.closest('.content_container').children[2].childNodes[1], this);
         }
         textNode.style.textDecoration = 'line-through'
