@@ -26,6 +26,10 @@ body {
     }
     .todo_text {
         grid-area: tt;
+        &:focus {
+            outline: none;
+            background-color: rgba(0, 150, 199, .35);
+        }
     }
 }
 

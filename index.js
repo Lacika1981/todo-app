@@ -49,6 +49,7 @@ var todoApp = (function todoApp() {
         deleteButton.setAttribute('class', 'remove-content');
         deleteButton.addEventListener('click', removeTodo);
         updateButton.addEventListener('click', updateContent);
+        doneButton.addEventListener('click', doneContent);
 
         var content = document.createTextNode(state.text);
         todoText.appendChild(content);
@@ -88,12 +89,28 @@ var todoApp = (function todoApp() {
 
     function updateContent() {
         var textNode = this.closest('.content_container').children[1];
-        textNode.focus();
-        textNode.click();
         state.updateContent = textNode.textContent;
         textNode.getAttribute('contentEditable') == 'true'
         ? textNode.setAttribute('contentEditable', false)
         : textNode.setAttribute('contentEditable', true);
+        textNode.focus();
+    }
+
+    function doneContent() {
+        var textNode = this.closest('.content_container').children[1];
+        if(textNode.getAttribute('done') == 'true') {
+            return
+        } else {
+            textNode.setAttribute('done', true)
+            disableButton(this.closest('.content_container').children[2].childNodes[1], this);
+        }
+        textNode.style.textDecoration = 'line-through'
+    }
+
+    function disableButton(...buttons) {
+        buttons.map(button => {
+            button.setAttribute('disabled', true);
+        })
     }
 
     function removeTodo() {
