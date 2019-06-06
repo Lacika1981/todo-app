@@ -4,7 +4,7 @@ body {
         'h h h'
         'c c c'
         'atf atf atf';
-    width: 960px;
+    width: 600px;
 }
 
 #header {
@@ -41,6 +41,22 @@ body {
     grid-template-columns: 1fr 1fr 200px;
     input.text {
         grid-area: if;
+    }
+}
+
+button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: cornsilk;
+    &:disabled {
+        opacity: .5;
+    }
+    &.add_content {
+        background: url('../../Assets/images/tick.svg');
+        background-size: 50%;
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
     }
 }
 
