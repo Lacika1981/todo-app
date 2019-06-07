@@ -13,6 +13,8 @@ body {
 }
 
 .content {
+    display: grid;
+    grid-row-gap: 10px;
     grid-area: c;
     &_container {
         display: grid;
@@ -31,16 +33,26 @@ body {
             background-color: rgba(0, 150, 199, .35);
         }
     }
+    .list_numbers,
+    .todo_text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 #add_text_field {
     grid-area: atf;
     display: grid;
     grid-template-areas: 
-        'if if b';
-    grid-template-columns: 1fr 1fr 200px;
+        'ph if b';
+    grid-template-columns: 100px 1fr 200px;
+    margin-top: 25px;
     input.text {
         grid-area: if;
+    }
+    .placeholderDiv {
+        grid-area: ph;
     }
 }
 
@@ -48,21 +60,56 @@ button {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: cornsilk;
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    transition: background-color .5s;
     &:disabled {
         opacity: .5;
     }
     &.add_content {
-        background: url('../../Assets/images/tick.svg');
-        background-size: 50%;
-        background-repeat: no-repeat;
-        background-position: 50% 50%;
+        background-image: url('../../Assets/images/plus.svg');
+        background-color: lighten($color: #000000, $amount: 75);
+    }
+    &.update_status {
+        background-image: url('../../Assets/images/tick.svg');
+        background-color: lighten($color: #00ff00, $amount: 33);
+    }
+    &.update_done {
+        background-image: url('../../Assets/images/text.svg');
+        background-color: lighten($color: #555599, $amount: 33);
+    }
+    &.remove_content {
+        background-image: url('../../Assets/images/remove.svg');
+        background-color: lighten($color: #ff0000, $amount: 33);
+    }
+    &.add_content {
+        &:not(:disabled) {
+            &:hover {
+                background-color: lighten($color: #000000, $amount: 40);
+            }
+        }
+    }
+    &.update_status {
+        &:hover {
+            background-color: lighten($color: #00ff00, $amount: 10);
+        }
+    }
+    &.update_done {
+        &:hover {
+            background-color: lighten($color: #559999, $amount: 10);
+        }
+    }
+    &.remove_content {
+        &:hover {
+            background-color: lighten($color: #ff0000, $amount: 10);
+        }
     }
 }
 
 .button_container {
     grid-area: b;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
 }

@@ -44,9 +44,9 @@ var todoApp = (function todoApp() {
         todoText.setAttribute('class', 'todo_text');
         todoText.setAttribute('contentEditable', false);
         buttonContainer.setAttribute('class', 'button_container');
-        doneButton.setAttribute('class', 'update_content');
+        doneButton.setAttribute('class', 'update_status');
         updateButton.setAttribute('class', 'update_done');
-        deleteButton.setAttribute('class', 'remove-content');
+        deleteButton.setAttribute('class', 'remove_content');
         deleteButton.addEventListener('click', removeTodo);
         updateButton.addEventListener('click', updateContent);
         doneButton.addEventListener('click', doneContent);
@@ -56,13 +56,6 @@ var todoApp = (function todoApp() {
 
         var liNumber = document.createTextNode(state.numberOfElems);
         listNumber.appendChild(liNumber);
-
-        var doneContentText = document.createTextNode('Done');
-        doneButton.appendChild(doneContentText);
-        var deleteContentText = document.createTextNode('Delete');
-        deleteButton.appendChild(deleteContentText);
-        var updateContentText = document.createTextNode('Update');
-        updateButton.appendChild(updateContentText);
 
         buttonContainer.appendChild(doneButton);
         buttonContainer.appendChild(updateButton);
