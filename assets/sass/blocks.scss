@@ -91,18 +91,24 @@ button {
         }
     }
     &.update_status {
-        &:hover {
-            background-color: lighten($color: #00ff00, $amount: 10);
+        &:not(:disabled) {
+            &:hover {
+                background-color: lighten($color: #00ff00, $amount: 10);
+            }
         }
     }
     &.update_done {
-        &:hover {
-            background-color: lighten($color: #559999, $amount: 10);
+        &:not(:disabled) {
+            &:hover {
+                background-color: lighten($color: #559999, $amount: 10);
+            }
         }
     }
     &.remove_content {
-        &:hover {
-            background-color: lighten($color: #ff0000, $amount: 10);
+        &:not(:disabled) {
+            &:hover {
+                background-color: lighten($color: #ff0000, $amount: 10);
+            }
         }
     }
 }

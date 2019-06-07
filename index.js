@@ -31,7 +31,8 @@ var todoApp = (function todoApp() {
         addButton.addEventListener('click', createElems);
     }
 
-    function createElems() {
+    function createElems(contentFromStorage, bool, makeDone) {
+        var content;
         var contentContainer = document.createElement('section');
         var listNumber = document.createElement('div');
         var todoText = document.createElement('div');
@@ -51,7 +52,13 @@ var todoApp = (function todoApp() {
         updateButton.addEventListener('click', updateContent);
         doneButton.addEventListener('click', doneContent);
 
-        var content = document.createTextNode(state.text);
+        if(!bool) {
+            saveToLocalStorage(state.numberOfElems, state.text, false);
+            content = document.createTextNode(state.text);
+        } else {
+            content = document.createTextNode(contentFromStorage);
+        }
+
         todoText.appendChild(content);
 
         var liNumber = document.createTextNode(state.numberOfElems);
@@ -67,9 +74,11 @@ var todoApp = (function todoApp() {
 
         contentMain.appendChild(contentContainer);
 
+        if(makeDone) doneButton.click();
+        
+        state.numberOfElems++;
         inputField.value = '';
         updateState();
-        state.numberOfElems++;
     }
 
     function updateListNumbers() {
@@ -98,6 +107,7 @@ var todoApp = (function todoApp() {
             disableButton(this.closest('.content_container').children[2].childNodes[1], this);
         }
         textNode.style.textDecoration = 'line-through'
+        updateStorageIfMarkedDone(this);
     }
 
     function disableButton(...buttons) {
@@ -112,6 +122,44 @@ var todoApp = (function todoApp() {
         updateListNumbers();
         state.numberOfElems--;
     }
+
+    function saveToLocalStorage(id, content, bool) {
+        var a = {};
+        if(!localStorage.length) {
+            localStorage.setItem('todoList', JSON.stringify(a));
+        }
+        var obj = localStorage.getItem('todoList');
+        a = JSON.parse(obj);
+        a[id] = {content, done: bool};
+        localStorage.setItem('todoList', JSON.stringify(a));
+    }
+
+    function getElemsFromStorage() {
+        var obj = localStorage.getItem('todoList');
+        var a = JSON.parse(obj);
+        return a;
+    };
+
+    function restoreList() {
+        if(!localStorage.length) return;
+        var objFromStorage = getElemsFromStorage();
+        var keys = Object.keys(objFromStorage);
+        keys.forEach( key => {
+            if(objFromStorage[key]['done'] == false) {
+                createElems(objFromStorage[key]['content'], true, null);
+                } else {
+                    createElems(objFromStorage[key]['content'], true, true);
+                }
+            })
+    }
+
+    function updateStorageIfMarkedDone(e) {
+        var elemToChange = e.closest('.content_container').childNodes[0].textContent;
+        var content = e.closest('.content_container').childNodes[1].textContent;
+        saveToLocalStorage(elemToChange, content, true);
+    }
+
+    restoreList();
 
     addMethod();
 
