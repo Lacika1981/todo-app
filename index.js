@@ -31,7 +31,13 @@ var todoApp = (function todoApp() {
         addButton.addEventListener('click', createElems);
     }
 
-    function createElems(contentFromStorage, bool, makeDone) {
+    function cretaeuid() {
+        return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+          )
+    }
+
+    function createElems(contentFromStorage,id, bool, makeDone) {
         var content;
         var contentContainer = document.createElement('section');
         var listNumber = document.createElement('div');
@@ -51,11 +57,16 @@ var todoApp = (function todoApp() {
         deleteButton.addEventListener('click', removeTodo);
         updateButton.addEventListener('click', updateContent);
         doneButton.addEventListener('click', doneContent);
+        
+        if(!id) {
+            contentContainer.setAttribute('data-uid', cretaeuid());
+        }
 
         if(!bool) {
-            saveToLocalStorage(state.numberOfElems, state.text, false);
+            saveToLocalStorage(contentContainer.getAttribute('data-uid'), state.text, false);
             content = document.createTextNode(state.text);
         } else {
+            contentContainer.setAttribute('data-uid', id);
             content = document.createTextNode(contentFromStorage);
         }
 
@@ -124,13 +135,13 @@ var todoApp = (function todoApp() {
     }
 
     function saveToLocalStorage(id, content, bool) {
-        var a = {};
+        var a = [];
         if(!localStorage.length) {
             localStorage.setItem('todoList', JSON.stringify(a));
         }
         var obj = localStorage.getItem('todoList');
         a = JSON.parse(obj);
-        a[id] = {content, done: bool};
+        a.push({id, content, done: bool});
         localStorage.setItem('todoList', JSON.stringify(a));
     }
 
@@ -146,9 +157,9 @@ var todoApp = (function todoApp() {
         var keys = Object.keys(objFromStorage);
         keys.forEach( key => {
             if(objFromStorage[key]['done'] == false) {
-                createElems(objFromStorage[key]['content'], true, null);
+                createElems(objFromStorage[key]['content'],objFromStorage[key]['id'], true, null);
                 } else {
-                    createElems(objFromStorage[key]['content'], true, true);
+                    createElems(objFromStorage[key]['content'],objFromStorage[key]['id'], true, true);
                 }
             })
     }
@@ -156,7 +167,7 @@ var todoApp = (function todoApp() {
     function updateStorageIfMarkedDone(e) {
         var elemToChange = e.closest('.content_container').childNodes[0].textContent;
         var content = e.closest('.content_container').childNodes[1].textContent;
-        saveToLocalStorage(elemToChange, content, true);
+        // saveToLocalStorage(elemToChange, content, true);
     }
 
     restoreList();
