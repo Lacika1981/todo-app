@@ -11,6 +11,8 @@ var todoApp = (function todoApp() {
         updateContent: '',
     };
 
+    var storeName = 'todoApp';
+
     var inputField = document.querySelector('input.text');
     var contentMain = document.querySelector('.content');
     var addButton = document.querySelector('button.add_content');
@@ -37,7 +39,11 @@ var todoApp = (function todoApp() {
           )
     }
 
-    function createElems(contentFromStorage,id, bool, makeDone) {
+    function createElems(t, id) {
+        var text;
+        if(typeof t == 'string') {
+            text = t;
+        }
         var content;
         var contentContainer = document.createElement('section');
         var listNumber = document.createElement('div');
@@ -58,34 +64,31 @@ var todoApp = (function todoApp() {
         updateButton.addEventListener('click', updateContent);
         doneButton.addEventListener('click', doneContent);
         
-        if(!id) {
-            contentContainer.setAttribute('data-uid', cretaeuid());
-        }
-
-        if(!bool) {
-            saveToLocalStorage(contentContainer.getAttribute('data-uid'), state.text, false);
-            content = document.createTextNode(state.text);
-        } else {
-            contentContainer.setAttribute('data-uid', id);
-            content = document.createTextNode(contentFromStorage);
-        }
+        content = document.createTextNode(text || state.text);
 
         todoText.appendChild(content);
 
+        var uid = cretaeuid();
+        if(!text) {
+            addItemToStorage(uid, content, false);
+            contentContainer.setAttribute('data-uid', uid);
+        } else {
+            contentContainer.setAttribute('data-uid', id);
+        }
+        
         var liNumber = document.createTextNode(state.numberOfElems);
         listNumber.appendChild(liNumber);
-
+        
         buttonContainer.appendChild(doneButton);
         buttonContainer.appendChild(updateButton);
         buttonContainer.appendChild(deleteButton);
-
+        
         contentContainer.appendChild(listNumber);
         contentContainer.appendChild(todoText);
         contentContainer.appendChild(buttonContainer);
 
+        
         contentMain.appendChild(contentContainer);
-
-        if(makeDone) doneButton.click();
         
         state.numberOfElems++;
         inputField.value = '';
@@ -118,7 +121,6 @@ var todoApp = (function todoApp() {
             disableButton(this.closest('.content_container').children[2].childNodes[1], this);
         }
         textNode.style.textDecoration = 'line-through'
-        updateStorageIfMarkedDone(this);
     }
 
     function disableButton(...buttons) {
@@ -129,45 +131,53 @@ var todoApp = (function todoApp() {
 
     function removeTodo() {
         var toDelete = this.closest('.content_container');
+        var uid= toDelete.getAttribute('data-uid');
+
+        deleteItemFromStorage(uid);
+
         contentMain.removeChild(toDelete);
         updateListNumbers();
         state.numberOfElems--;
     }
 
-    function saveToLocalStorage(id, content, bool) {
-        var a = [];
-        if(!localStorage.length) {
-            localStorage.setItem('todoList', JSON.stringify(a));
-        }
-        var obj = localStorage.getItem('todoList');
-        a = JSON.parse(obj);
-        a.push({id, content, done: bool});
-        localStorage.setItem('todoList', JSON.stringify(a));
+    function retrieveStore(store) {
+        var storage = localStorage.getItem(store);
+        return JSON.parse(storage);
     }
 
-    function getElemsFromStorage() {
-        var obj = localStorage.getItem('todoList');
-        var a = JSON.parse(obj);
-        return a;
-    };
+    function setStore(store, array) {
+        localStorage.setItem(store, array);
+    }
+
+
+    /**
+     * 
+     * @param {unique ID from createuid function} uid 
+     * @param {text content} content 
+     * @param {whether the content is done or not (line through), if done can not be updated anymore} done 
+     */
+    function addItemToStorage(uid, content, done) {
+        if(localStorage && !localStorage.getItem(storeName)) {
+            var elemsArray = [];
+            elemsArray.push({uid, content: content.data, done});
+            setStore(storeName, JSON.stringify(elemsArray));
+        }
+        else if(localStorage && localStorage.getItem(storeName)) {
+            var storeArray = retrieveStore(storeName);
+            storeArray.push({uid, content: content.data, done});
+            setStore(storeName, JSON.stringify(storeArray));
+        }
+    }
+
+    function deleteItemFromStorage(uid) {
+        var storeArray = retrieveStore(storeName);
+        storeArray = storeArray.filter( elem => { return elem.uid != uid });
+        setStore(storeName, JSON.stringify(storeArray));
+    }
 
     function restoreList() {
-        if(!localStorage.length) return;
-        var objFromStorage = getElemsFromStorage();
-        var keys = Object.keys(objFromStorage);
-        keys.forEach( key => {
-            if(objFromStorage[key]['done'] == false) {
-                createElems(objFromStorage[key]['content'],objFromStorage[key]['id'], true, null);
-                } else {
-                    createElems(objFromStorage[key]['content'],objFromStorage[key]['id'], true, true);
-                }
-            })
-    }
-
-    function updateStorageIfMarkedDone(e) {
-        var elemToChange = e.closest('.content_container').childNodes[0].textContent;
-        var content = e.closest('.content_container').childNodes[1].textContent;
-        // saveToLocalStorage(elemToChange, content, true);
+        var storeArray = retrieveStore(storeName);
+        if(storeArray) storeArray.map( elem => createElems(elem.content, elem.uid));
     }
 
     restoreList();
