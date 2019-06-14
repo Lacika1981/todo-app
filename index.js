@@ -114,7 +114,6 @@ var todoApp = (function todoApp() {
     function updateContent() {
         var textNode = this.closest('.content_container').children[1];
         var uid = this.closest('.content_container').getAttribute('data-uid');
-        console.log(uid);
         state.updateContent = textNode.textContent;
         textNode.getAttribute('contentEditable') == 'true'
             ? ( textNode.setAttribute('contentEditable', false), updateStore(textNode.textContent, uid) )
