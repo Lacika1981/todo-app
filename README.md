@@ -1,6 +1,6 @@
 # todo-app
 
-ToDo app using indexedDB.
+ToDo app using localStorage.
 
 How to use
 
