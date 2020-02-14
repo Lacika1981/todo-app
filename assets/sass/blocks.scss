@@ -74,19 +74,19 @@ button {
     opacity: 0.5;
   }
   &.add_content {
-    background-image: url('../../Assets/images/plus.svg');
+    background-image: url('../../assets/images/plus.svg');
     background-color: lighten($color: #000000, $amount: 75);
   }
   &.update_status {
-    background-image: url('../../Assets/images/tick.svg');
+    background-image: url('../../assets/images/tick.svg');
     background-color: lighten($color: #00ff00, $amount: 33);
   }
   &.update_done {
-    background-image: url('../../Assets/images/text.svg');
+    background-image: url('../../assets/images/text.svg');
     background-color: lighten($color: #555599, $amount: 33);
   }
   &.remove_content {
-    background-image: url('../../Assets/images/remove.svg');
+    background-image: url('../../assets/images/remove.svg');
     background-color: lighten($color: #ff0000, $amount: 33);
   }
   &.add_content {
