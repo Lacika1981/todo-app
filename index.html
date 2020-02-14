@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="css/sass/index.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="css/sass/index.css" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
     <header id="header">
-        <h1>
-            ToDo List
-        </h1>
+      <h1>
+        ToDo List
+      </h1>
     </header>
-    <section id="content" class="content"></section>
-    <section id="add_text_field" class="add_text_field">
-        <div class="placeholderDiv"></div>
-        <input type="text" class="text">
-        <div class="button_container">
-            <button class="add_content" disabled></button>
-        </div>
+    <section id="content" class="content section"></section>
+    <section id="add_text_field" class="add_text_field section">
+      <div class="placeholderDiv"></div>
+      <input type="text" class="text" placeholder="Add new ToDo" />
+      <div class="button_container">
+        <button class="add_content" disabled></button>
+      </div>
     </section>
-    <script src="index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
+    <script type="module" src="index.js"></script>
     <script type="module" src="idb-db.js"></script>
     <script>
-        var a = todoApp();
-        var b = a.logState;
+      // var a = todoApp();
+      // var b = a.logState;
     </script>
-</body>
+  </body>
 </html>
